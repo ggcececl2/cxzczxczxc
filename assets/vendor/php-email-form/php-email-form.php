@@ -1,5 +1,4 @@
 <?php
-// PHP Email Form Class
 class PHP_Email_Form
 {
   public $to;

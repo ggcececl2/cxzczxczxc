@@ -1,16 +1,10 @@
-/*!
-Waypoints - 4.0.1
-Copyright © 2011-2016 Caleb Troughton
-Licensed under the MIT license.
-https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
-*/
+
 (function() {
   'use strict'
 
   var keyCounter = 0
   var allWaypoints = {}
 
-  /* http://imakewebthings.com/waypoints/api/waypoint */
   function Waypoint(options) {
     if (!options) {
       throw new Error('No options passed to Waypoint constructor')
@@ -45,12 +39,10 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     keyCounter += 1
   }
 
-  /* Private */
   Waypoint.prototype.queueTrigger = function(direction) {
     this.group.queueTrigger(this, direction)
   }
 
-  /* Private */
   Waypoint.prototype.trigger = function(args) {
     if (!this.enabled) {
       return
@@ -60,42 +52,36 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     }
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/destroy */
+  
   Waypoint.prototype.destroy = function() {
     this.context.remove(this)
     this.group.remove(this)
     delete allWaypoints[this.key]
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/disable */
+  
   Waypoint.prototype.disable = function() {
     this.enabled = false
     return this
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/enable */
+ 
   Waypoint.prototype.enable = function() {
     this.context.refresh()
     this.enabled = true
     return this
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/next */
+ 
   Waypoint.prototype.next = function() {
     return this.group.next(this)
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/previous */
+
   Waypoint.prototype.previous = function() {
     return this.group.previous(this)
   }
 
-  /* Private */
   Waypoint.invokeAll = function(method) {
     var allWaypointsArray = []
     for (var waypointKey in allWaypoints) {
@@ -106,20 +92,17 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     }
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/destroy-all */
+
   Waypoint.destroyAll = function() {
     Waypoint.invokeAll('destroy')
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/disable-all */
+  
   Waypoint.disableAll = function() {
     Waypoint.invokeAll('disable')
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/enable-all */
+
   Waypoint.enableAll = function() {
     Waypoint.Context.refreshAll()
     for (var waypointKey in allWaypoints) {
@@ -128,20 +111,17 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     return this
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/refresh-all */
+ 
   Waypoint.refreshAll = function() {
     Waypoint.Context.refreshAll()
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/viewport-height */
+
   Waypoint.viewportHeight = function() {
     return window.innerHeight || document.documentElement.clientHeight
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/viewport-width */
+
   Waypoint.viewportWidth = function() {
     return document.documentElement.clientWidth
   }
@@ -180,7 +160,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   var Waypoint = window.Waypoint
   var oldWindowLoad = window.onload
 
-  /* http://imakewebthings.com/waypoints/api/context */
+
   function Context(element) {
     this.element = element
     this.Adapter = Waypoint.Adapter
@@ -209,14 +189,12 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     this.createThrottledResizeHandler()
   }
 
-  /* Private */
   Context.prototype.add = function(waypoint) {
     var axis = waypoint.options.horizontal ? 'horizontal' : 'vertical'
     this.waypoints[axis][waypoint.key] = waypoint
     this.refresh()
   }
 
-  /* Private */
   Context.prototype.checkEmpty = function() {
     var horizontalEmpty = this.Adapter.isEmptyObject(this.waypoints.horizontal)
     var verticalEmpty = this.Adapter.isEmptyObject(this.waypoints.vertical)
@@ -227,7 +205,6 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     }
   }
 
-  /* Private */
   Context.prototype.createThrottledResizeHandler = function() {
     var self = this
 
@@ -244,7 +221,6 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     })
   }
 
-  /* Private */
   Context.prototype.createThrottledScrollHandler = function() {
     var self = this
     function scrollHandler() {
@@ -260,12 +236,10 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     })
   }
 
-  /* Private */
   Context.prototype.handleResize = function() {
     Waypoint.Context.refreshAll()
   }
 
-  /* Private */
   Context.prototype.handleScroll = function() {
     var triggeredGroups = {}
     var axes = {
@@ -314,34 +288,26 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     }
   }
 
-  /* Private */
   Context.prototype.innerHeight = function() {
-    /*eslint-disable eqeqeq */
     if (this.element == this.element.window) {
       return Waypoint.viewportHeight()
     }
-    /*eslint-enable eqeqeq */
     return this.adapter.innerHeight()
   }
 
-  /* Private */
   Context.prototype.remove = function(waypoint) {
     delete this.waypoints[waypoint.axis][waypoint.key]
     this.checkEmpty()
   }
 
-  /* Private */
   Context.prototype.innerWidth = function() {
-    /*eslint-disable eqeqeq */
     if (this.element == this.element.window) {
       return Waypoint.viewportWidth()
     }
-    /*eslint-enable eqeqeq */
     return this.adapter.innerWidth()
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/context-destroy */
+ 
   Context.prototype.destroy = function() {
     var allWaypoints = []
     for (var axis in this.waypoints) {
@@ -354,12 +320,9 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     }
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/context-refresh */
+ 
   Context.prototype.refresh = function() {
-    /*eslint-disable eqeqeq */
     var isWindow = this.element == this.element.window
-    /*eslint-enable eqeqeq */
     var contextOffset = isWindow ? undefined : this.adapter.offset()
     var triggeredGroups = {}
     var axes
@@ -442,20 +405,17 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     return this
   }
 
-  /* Private */
   Context.findOrCreateByElement = function(element) {
     return Context.findByElement(element) || new Context(element)
   }
 
-  /* Private */
   Context.refreshAll = function() {
     for (var contextId in contexts) {
       contexts[contextId].refresh()
     }
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/context-find-by-element */
+ 
   Context.findByElement = function(element) {
     return contexts[element.waypointContextKey]
   }
@@ -494,7 +454,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   }
   var Waypoint = window.Waypoint
 
-  /* http://imakewebthings.com/waypoints/api/group */
+  
   function Group(options) {
     this.name = options.name
     this.axis = options.axis
@@ -504,12 +464,12 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     groups[this.axis][this.name] = this
   }
 
-  /* Private */
+ 
   Group.prototype.add = function(waypoint) {
     this.waypoints.push(waypoint)
   }
 
-  /* Private */
+  
   Group.prototype.clearTriggerQueues = function() {
     this.triggerQueues = {
       up: [],
@@ -519,7 +479,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     }
   }
 
-  /* Private */
+  
   Group.prototype.flushTriggers = function() {
     for (var direction in this.triggerQueues) {
       var waypoints = this.triggerQueues[direction]
@@ -535,7 +495,6 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     this.clearTriggerQueues()
   }
 
-  /* Private */
   Group.prototype.next = function(waypoint) {
     this.waypoints.sort(byTriggerPoint)
     var index = Waypoint.Adapter.inArray(waypoint, this.waypoints)
@@ -543,19 +502,16 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     return isLast ? null : this.waypoints[index + 1]
   }
 
-  /* Private */
   Group.prototype.previous = function(waypoint) {
     this.waypoints.sort(byTriggerPoint)
     var index = Waypoint.Adapter.inArray(waypoint, this.waypoints)
     return index ? this.waypoints[index - 1] : null
   }
 
-  /* Private */
   Group.prototype.queueTrigger = function(waypoint, direction) {
     this.triggerQueues[direction].push(waypoint)
   }
 
-  /* Private */
   Group.prototype.remove = function(waypoint) {
     var index = Waypoint.Adapter.inArray(waypoint, this.waypoints)
     if (index > -1) {
@@ -563,19 +519,17 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     }
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/first */
+  
   Group.prototype.first = function() {
     return this.waypoints[0]
   }
 
-  /* Public */
-  /* http://imakewebthings.com/waypoints/api/last */
+ 
   Group.prototype.last = function() {
     return this.waypoints[this.waypoints.length - 1]
   }
 
-  /* Private */
+  
   Group.findOrCreate = function(options) {
     return groups[options.axis][options.name] || new Group(options)
   }
@@ -646,7 +600,6 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     }
   }
 
-  /* Adapted from jQuery 1.x offset() */
   NoFrameworkAdapter.prototype.offset = function() {
     if (!this.element.ownerDocument) {
       return null
@@ -742,7 +695,6 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   }
 
   NoFrameworkAdapter.isEmptyObject = function(obj) {
-    /* eslint no-unused-vars: 0 */
     for (var name in obj) {
       return false
     }
