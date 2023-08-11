@@ -1,7 +1,7 @@
 <?php
 
 
-$receiving_email_address = 'shehababedrabuh@gmail.com';
+$receiving_email_address = 'shehab.h.abedrabuh@hotmail.com';
 
 if (file_exists($php_email_form = '../assets/vendor/php-email-form/php-email-form.php')) {
   include($php_email_form);
@@ -18,12 +18,12 @@ $contact->from_email = $_POST['email'];
 $contact->subject = $_POST['subject'];
 
 
-$contact->smtp = array(
-  'host' => 'smtp.gmail.com',
-  'username' => 'shehababedrabuh@gmail.com',
-  'password' => 'xlsidhyvxflancun',
-  'port' => '587'
-);
+//$contact->smtp = array(
+ // 'host' => 'smtp.gmail.com',
+  //'username' => 'shehababedrabuh@gmail.com',
+  //'password' => 'xlsidhyvxflancun',
+  //'port' => '587'
+//);
 
 $contact->add_message($_POST['name'], 'Name');
 $contact->add_message($_POST['email'], 'Email');
